@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, lengleng All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: lengleng (wangiegie@gmail.com)
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pig4cloud.pigx.generator.mapper.TRegFaceUserMapper">
+
+	<resultMap id="tRegFaceUserMap" type="com.pig4cloud.pigx.generator.entity.TRegFaceUser">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="deptId" column="dept_id"/>
+		<result property="dept" column="dept"/>
+		<result property="jobNumber" column="job_number"/>
+		<result property="phone" column="phone"/>
+		<result property="gateCardNum" column="gate_card_num"/>
+		<result property="email" column="email"/>
+		<result property="address" column="address"/>
+		<result property="licensePlate" column="license_plate"/>
+		<result property="gender" column="gender"/>
+		<result property="isTime" column="is_time"/>
+		<result property="birthday" column="birthday"/>
+		<result property="position" column="position"/>
+		<result property="idCard" column="id_card"/>
+		<result property="passingTime" column="passing_time"/>
+		<result property="effectiveNum" column="effective_num"/>
+		<result property="photo" column="photo"/>
+		<result property="faceId" column="face_id"/>
+		<result property="faceMachineIp" column="face_machine_ip"/>
+		<result property="isBlacklist" column="is_blacklist"/>
+	 </resultMap>
+</mapper>

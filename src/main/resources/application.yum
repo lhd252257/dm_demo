@@ -1,0 +1,18 @@
+server:
+  port: 8083
+  
+# 数据源相关配置
+db:
+  num: 1
+  user: root
+  password: 1qaz!QAZ
+  url:
+    0: jdbc:mysql://117.78.31.134:3306/dormitory_management?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+
+spring:
+  datasource:
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+  security:
+    enabled: false
+
