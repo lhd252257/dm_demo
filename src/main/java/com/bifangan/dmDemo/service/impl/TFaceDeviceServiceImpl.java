@@ -1,5 +1,6 @@
 package com.bifangan.dmDemo.service.impl;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,6 +15,7 @@ import com.bifangan.dmDemo.service.TFaceDeviceService;
  * @date 2020-07-02 16:42:33
  */
 @Service
+@Primary
 public class TFaceDeviceServiceImpl extends ServiceImpl<TFaceDeviceMapper, TFaceDevice> implements TFaceDeviceService {
 
 }

@@ -1,5 +1,6 @@
 package com.bifangan.dmDemo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import com.bifangan.dmDemo.service.TDeptService;
 @RestController
 @RequestMapping("/tdept" )
 public class TDeptController {
-
+	@Autowired(required=true)
     private TDeptService tDeptService;
 
     /**

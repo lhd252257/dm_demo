@@ -38,7 +38,7 @@ public interface CommonConstants {
 	/**
 	 * 公共参数
 	 */
-	String PIG_PUBLIC_PARAM_KEY = "PUBLIC_PARAM_KEY";
+	String PUBLIC_PARAM_KEY = "PUBLIC_PARAM_KEY";
 
 	/**
 	 * 成功标记
@@ -49,5 +49,6 @@ public interface CommonConstants {
 	 */
 	Integer FAIL = 1;
 
+	String FACE_USER_ADD = "http://127.0.0.1:2010/add_user";
 
 }

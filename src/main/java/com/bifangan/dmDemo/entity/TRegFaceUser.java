@@ -1,11 +1,14 @@
 package com.bifangan.dmDemo.entity;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.time.LocalDateTime;
 
 /**
  * 注册人脸用户
@@ -16,8 +19,8 @@ import java.time.LocalDateTime;
 @Data
 @TableName("t_reg_face_user")
 @EqualsAndHashCode(callSuper = true)
-public class TRegFaceUser extends Model<TRegFaceUser> {
-private static final long serialVersionUID = 1L;
+public class TRegFaceUser extends Model<TRegFaceUser> implements Cloneable {
+	private static final long serialVersionUID = 1L;
 
     /**
    * id
@@ -71,7 +74,7 @@ private static final long serialVersionUID = 1L;
     /**
    * 生日
    */
-    private LocalDateTime birthday;
+    private Date birthday;
     /**
    * 职位
    */
@@ -101,8 +104,14 @@ private static final long serialVersionUID = 1L;
    */
     private String faceMachineIp;
     /**
-   * 是否是黑名单
+   * 是否是黑名单 1:是黑名单  0:不是黑名单
    */
     private Integer isBlacklist;
   
+    @Override
+	public Object clone() throws CloneNotSupportedException {
+    	// TODO Auto-generated method stub
+    	return super.clone();
+    }
+    
 }
