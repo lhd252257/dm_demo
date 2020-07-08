@@ -25,4 +25,6 @@ public interface TRegFaceUserService extends IService<TRegFaceUser> {
 	boolean save(RegFaceUserVO user);
 	
 	public int importUser(MultipartFile file) throws IOException;
+	
+	public int refreshState();
 }

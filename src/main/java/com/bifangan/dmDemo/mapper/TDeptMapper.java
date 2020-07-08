@@ -13,5 +13,7 @@ import com.bifangan.dmDemo.entity.TDept;
  */
 @Repository
 public interface TDeptMapper extends BaseMapper<TDept> {
-
+	
+	public String getInFaceMachineIPByUserDeptId(String userId);
+	
 }

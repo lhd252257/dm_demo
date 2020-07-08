@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bifangan.dmDemo.entity.TDept;
+import com.bifangan.dmDemo.global.CounterGlobal;
 import com.bifangan.dmDemo.mapper.TDeptMapper;
 import com.bifangan.dmDemo.service.TDeptService;
 
@@ -18,4 +19,9 @@ import com.bifangan.dmDemo.service.TDeptService;
 @Primary
 public class TDeptServiceImpl extends ServiceImpl<TDeptMapper, TDept> implements TDeptService {
 
+	@Override
+	public boolean save(TDept entity) {
+		return super.save(entity);
+	}
+	
 }

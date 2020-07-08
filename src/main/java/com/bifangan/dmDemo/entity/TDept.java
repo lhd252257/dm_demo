@@ -35,10 +35,12 @@ private static final long serialVersionUID = 1L;
    * 父节点
    */
     private String parentId;
+   
     /**
-   * 进口人脸机ip
-   */
+     * 进口人脸机ip
+     */
     private String inFaceMachineIp;
+    
     /**
      * 出口人脸机ip
      */

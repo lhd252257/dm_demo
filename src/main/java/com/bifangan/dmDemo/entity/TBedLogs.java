@@ -48,6 +48,10 @@ private static final long serialVersionUID = 1L;
    */
     private String faceid;
     /**
+     * 设备ID
+     */
+    private String deviceId;
+    /**
    * 进出时间
    */
     private Date ioTime;

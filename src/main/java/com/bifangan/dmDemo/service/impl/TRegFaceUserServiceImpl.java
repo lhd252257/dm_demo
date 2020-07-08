@@ -2,14 +2,17 @@ package com.bifangan.dmDemo.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -23,8 +26,12 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bifangan.dmDemo.common.R;
+import com.bifangan.dmDemo.common.UUIDUtils;
 import com.bifangan.dmDemo.constant.CommonConstants;
+import com.bifangan.dmDemo.entity.TBedLogs;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
+import com.bifangan.dmDemo.mapper.TBedLogsMapper;
+import com.bifangan.dmDemo.mapper.TDeptMapper;
 import com.bifangan.dmDemo.mapper.TRegFaceUserMapper;
 import com.bifangan.dmDemo.service.TRegFaceUserService;
 import com.bifangan.dmDemo.utils.FileUploadUtil;
@@ -45,6 +52,12 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 	@Autowired
 	private TRegFaceUserMapper tRegFaceUserMapper;
 	
+	@Autowired
+	private TBedLogsMapper tBedLogsMapper;
+	
+	@Autowired
+	private TDeptMapper tDeptMapper;
+	
 	@Override
 	public R blacklist(Map param) {
 		QueryWrapper<TRegFaceUser> query = new QueryWrapper<>();
@@ -58,6 +71,38 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				result.setCode(0);
 			} else {
 				result.setCode(1);
+				
+				Date nowDate = new Date();
+				TBedLogs bedLogs = new TBedLogs();
+				bedLogs.setUserId(faceUser.getId());
+				bedLogs.setUserName(faceUser.getName());
+				bedLogs.setDeptId(faceUser.getDeptId());
+				bedLogs.setDept(faceUser.getDept());
+				bedLogs.setFaceid(faceUser.getFaceId());
+				bedLogs.setDeviceId((String)param.get("ID"));
+				bedLogs.setIoTime(nowDate);
+				// 1进 2出
+				bedLogs.setIoFlag(1);
+				
+				Calendar startCalendar = Calendar.getInstance();
+				startCalendar.setTime(nowDate);
+				startCalendar.set(Calendar.HOUR_OF_DAY, getTimeX(faceUser.getPassingTime(), "start", Calendar.HOUR_OF_DAY));
+				startCalendar.set(Calendar.MINUTE, getTimeX(faceUser.getPassingTime(), "start", Calendar.MINUTE));
+				startCalendar.set(Calendar.SECOND, 0);
+				
+				Calendar endCalendar = Calendar.getInstance();
+				startCalendar.setTime(nowDate);
+				startCalendar.set(Calendar.HOUR_OF_DAY, getTimeX(faceUser.getPassingTime(), "end", Calendar.HOUR_OF_DAY));
+				startCalendar.set(Calendar.MINUTE, getTimeX(faceUser.getPassingTime(), "end", Calendar.MINUTE));
+				startCalendar.set(Calendar.SECOND, 0);
+				if(nowDate.compareTo(startCalendar.getTime()) > 1 && nowDate.compareTo(endCalendar.getTime()) <1) {
+					// 晚归
+					bedLogs.setBedState(1);
+				} else {
+					// 在寝
+					bedLogs.setBedState(2);
+				}
+				tBedLogsMapper.insert(bedLogs);
 			}
 		}
 		return result;
@@ -71,6 +116,8 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 		QueryWrapper<TRegFaceUser> query = new QueryWrapper<>();
 		query.eq("id_card", user.getIdCard());
 		TRegFaceUser faceUser = tRegFaceUserMapper.selectOne(query);
+		
+		user.setFaceId(UUIDUtils.getUUID36());
 		
 		MultipartFile photo = user.getPhotoFile();
 		boolean isUpload = FileUploadUtil.upload(photo);
@@ -200,4 +247,92 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 
 	}
 
+	@Override
+	public int refreshState() {
+		int result = 0;
+		
+		// TODO 因为演示所以此功能没有设置昨天到今天的时间，设置的是今天到明天6点的时间
+		QueryWrapper queryWrapper = new QueryWrapper();
+		queryWrapper.eq("is_blacklist", 0);
+//		queryWrapper.notExists("select * from t_bed_logs where io_time between "+ startDate +" and " + endDate);
+		// 查询非黑名单注册用户
+		List<TRegFaceUser> userList = tRegFaceUserMapper.selectObjs(queryWrapper);
+		
+		Calendar endCalendar = Calendar.getInstance();
+		endCalendar.setTime(new Date());
+		endCalendar.add(Calendar.DATE, 1);
+		endCalendar.set(Calendar.HOUR_OF_DAY, 6);
+		endCalendar.set(Calendar.MINUTE, 0);
+		endCalendar.set(Calendar.SECOND, 0);
+		Date endDate = endCalendar.getTime();
+		
+		if(userList != null && !userList.isEmpty()) {
+			
+			for(Iterator<TRegFaceUser> i = userList.iterator(); i.hasNext(); ) {
+				TRegFaceUser user = i.next();
+				String[] times = user.getPassingTime().split("-")[0].split(":");
+				Calendar startCalendar = Calendar.getInstance();
+				startCalendar.setTime(new Date());
+				startCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(times[0]));
+				startCalendar.set(Calendar.MINUTE, Integer.parseInt(times[1]));
+				startCalendar.set(Calendar.SECOND, 0);
+				Date startDate = startCalendar.getTime();
+				
+				QueryWrapper<TBedLogs> wrapper = new QueryWrapper();
+				wrapper.eq("user_id", user.getId());
+				wrapper.between("io_time", startDate, endDate);
+				TBedLogs tBedLogs = tBedLogsMapper.selectOne(queryWrapper);
+				if(tBedLogs == null) {
+					TBedLogs bedLogs = new TBedLogs();
+					bedLogs.setUserId(user.getId());
+					bedLogs.setUserName(user.getName());
+					bedLogs.setDeptId(user.getDeptId());
+					bedLogs.setDept(user.getDept());
+					bedLogs.setFaceid(user.getFaceId());
+					// 未归
+					bedLogs.setBedState(4);
+					tBedLogsMapper.insert(bedLogs);
+					result++;
+				} else {
+					String InFaceMachineIP = tDeptMapper.getInFaceMachineIPByUserDeptId(user.getDeptId());
+					if(!tBedLogs.getFaceid().equals(InFaceMachineIP)) {
+						// 滞留
+						tBedLogs.setBedState(3);
+						tBedLogsMapper.updateById(tBedLogs);
+						result++;
+					}
+				}
+			}
+		}
+		
+		return 0;
+	}
+
+	/**
+	 * 
+	 * @param time
+	 * @param startOrEnd
+	 * @param calendarType
+	 * @return
+	 */
+	private int getTimeX(String time, String startOrEnd, int calendarType) {
+		String[] times = time.split("-");
+		if(null != startOrEnd) {
+			if("start".equals(startOrEnd)) {
+				if(Calendar.HOUR_OF_DAY == calendarType) {
+					return Integer.parseInt(times[0].split(":")[0]);
+				}else if(Calendar.MINUTE == calendarType) {
+					return Integer.parseInt(times[0].split(":")[1]);
+				}
+			} else if("end".equals(startOrEnd)) {
+				if(Calendar.HOUR_OF_DAY == calendarType) {
+					return Integer.parseInt(times[1].split(":")[0]);
+				}else if(Calendar.MINUTE == calendarType) {
+					return Integer.parseInt(times[1].split(":")[1]);
+				}
+			}
+		} 
+		return 0;
+	}
+	
 }

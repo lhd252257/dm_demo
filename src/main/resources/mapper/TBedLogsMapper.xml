@@ -30,6 +30,7 @@
                         <result property="deptId" column="dept_id"/>
                         <result property="dept" column="dept"/>
                         <result property="faceid" column="faceid"/>
+                        <result property="deviceId" column="deviceId" />
                         <result property="ioTime" column="io_time"/>
                         <result property="ioFlag" column="io_flag"/>
                         <result property="bedState" column="bed_state"/>

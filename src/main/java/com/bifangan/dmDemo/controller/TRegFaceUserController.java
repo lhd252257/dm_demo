@@ -147,4 +147,13 @@ public class TRegFaceUserController {
             return new R<>("应用导入模板下载失败！");
         }
     }
+    
+    /**
+     * 刷新滞留和未归日志
+     * @return
+     */
+    @RequestMapping("/refreshState")
+    public R refreshState() {
+    	return new R<>(tRegFaceUserService.refreshState());
+    }
 }
