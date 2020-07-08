@@ -294,8 +294,8 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 					tBedLogsMapper.insert(bedLogs);
 					result++;
 				} else {
-					String InFaceMachineIP = tDeptMapper.getInFaceMachineIPByUserDeptId(user.getDeptId());
-					if(!tBedLogs.getFaceid().equals(InFaceMachineIP)) {
+					String InFaceId = tDeptMapper.getInFaceIdByUserDeptId(user.getDeptId());
+					if(!tBedLogs.getDeviceId().equals(InFaceId)) {
 						// 滞留
 						tBedLogs.setBedState(3);
 						tBedLogsMapper.updateById(tBedLogs);

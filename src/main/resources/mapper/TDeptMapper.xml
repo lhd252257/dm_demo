@@ -23,15 +23,15 @@
 		<result property="name" column="name" />
 		<result property="remarks" column="remarks" />
 		<result property="parentId" column="parent_id" />
-		<result property="inFaceMachineIp" column="in_face_machine_ip" />
-		<result property="outFaceMachineIp"
-			column="out_face_machine_ip" />
+		<result property="inFaceId" column="in_face_Id" />
+		<result property="outFaceId"
+			column="out_face_id" />
 		<result property="counter" column="counter" />
 	</resultMap>
 
-	<select id="getInFaceMachineIPByUserDeptId">
+	<select id="getInFaceIdByUserDeptId">
 		SELECT
-			dept.in_face_machine_ip 
+			dept.in_face_id 
 		FROM
 			t_dept AS dept,
 			t_reg_face_user AS fuser 
