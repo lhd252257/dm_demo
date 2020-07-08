@@ -1,6 +1,5 @@
 package com.bifangan.dmDemo.entity;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -86,7 +85,7 @@ public class TRegFaceUser extends Model<TRegFaceUser> implements Cloneable {
     /**
    * 通行时间
    */
-    private LocalDateTime passingTime;
+    private String passingTime;
     /**
    * 有效次数
    */

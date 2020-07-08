@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 就寝日记表
@@ -49,7 +50,7 @@ private static final long serialVersionUID = 1L;
     /**
    * 进出时间
    */
-    private LocalDateTime ioTime;
+    private Date ioTime;
     /**
    * 进出标识(1:进，2:出)
    */
