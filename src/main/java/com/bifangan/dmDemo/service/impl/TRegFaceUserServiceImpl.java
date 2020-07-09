@@ -158,55 +158,34 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 	@Override
 	public int importUser(MultipartFile file) throws IOException {
 		int result = 0;
-		
 		List<TRegFaceUser> userList = new ArrayList<TRegFaceUser>();
-		
 		String fileName = file.getOriginalFilename();
 		String suffix = fileName.substring(fileName.lastIndexOf(".")+1);
-		
 		InputStream ins = file.getInputStream();
-		
 		Workbook wb = null;
-		
 		if(suffix.equals("xlsx")){
-			
 			wb = new XSSFWorkbook(ins);
-			
 		}else{
 			wb = new HSSFWorkbook(ins);
 		}
-
 		/**
 		 * 获取excel表单
 		 */
 		Sheet sheet = wb.getSheetAt(0);
 		if(null != sheet){
-			
 			for(int line = 2; line <= sheet.getLastRowNum();line++){
-				
 				TRegFaceUser user = new TRegFaceUser();
-				
 				Row row = sheet.getRow(line);
-				
 				if(null == row){
 					continue;
 				}
-				
-				
 				String name = row.getCell(0).getStringCellValue();
-				
 				int gender = "男".equals(row.getCell(1).getStringCellValue()) ? 1 : 0;
-				
 				Date birthday = row.getCell(2).getDateCellValue();
-				
 				String idCard = row.getCell(3).getStringCellValue();
-				
 				String jobNumber = row.getCell(4).getStringCellValue();
-				
 				String phone = row.getCell(5).getStringCellValue();
-				
 				String email = row.getCell(6).getStringCellValue();
-				
 				int isBlacklist = "是".equals(row.getCell(7).getStringCellValue()) ? 1 : 0;
 				user.setName(name);
 				user.setGender(gender);
@@ -216,35 +195,25 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				user.setPhone(phone);
 				user.setEmail(email);
 				user.setIsBlacklist(isBlacklist);
-				
 				userList.add(user);
-	
 			}
-			
 			for(TRegFaceUser userInfo:userList){
-			
 				/**
 				 * 判断数据库表中是否存在用户记录，若存在，则更新，不存在，则保存记录
 				 */
 				String idCard = userInfo.getIdCard();
-				
 				QueryWrapper query = new QueryWrapper();
 				query.eq("id_card", idCard);
-				
 				TRegFaceUser faceUser = tRegFaceUserMapper.selectOne(query);
-				
 				if(faceUser == null){			
 					result = tRegFaceUserMapper.insert(userInfo);
 				}else{
 					userInfo.setId(faceUser.getId());
 					result = tRegFaceUserMapper.updateById(userInfo);
 				}
-				
 			}
 		}
- 
 		return result;
-
 	}
 
 	@Override
@@ -333,6 +302,11 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 			}
 		} 
 		return 0;
+	}
+
+	@Override
+	public List<TRegFaceUser> textFullSearch(String content) {
+		return tRegFaceUserMapper.textFullSearchUser(content);
 	}
 	
 }

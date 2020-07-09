@@ -46,4 +46,13 @@
 		<result property="faceMachineIp" column="face_machine_ip"/>
 		<result property="isBlacklist" column="is_blacklist"/>
 	 </resultMap>
+	 
+	 <select id="textFullSearchUser">
+		SELECT
+			* 
+		FROM
+			t_reg_face_user 
+		WHERE
+			MATCH ( `name`, `job_number`, `phone`, `address`, `id_card` ) AGAINST ( '"${content}"' IN NATURAL LANGUAGE MODE );
+	 </select>
 </mapper>

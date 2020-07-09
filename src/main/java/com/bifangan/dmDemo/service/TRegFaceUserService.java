@@ -1,6 +1,7 @@
 package com.bifangan.dmDemo.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -27,4 +28,6 @@ public interface TRegFaceUserService extends IService<TRegFaceUser> {
 	public int importUser(MultipartFile file) throws IOException;
 	
 	public int refreshState();
+	
+	public List<TRegFaceUser> textFullSearch(String content);
 }

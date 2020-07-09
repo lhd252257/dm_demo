@@ -52,6 +52,10 @@ public class TRegFaceUserController {
         return new R<>(tRegFaceUserService.page(page, Wrappers.query(tRegFaceUser)));
     }
 
+    @PostMapping("/list")
+    public R getTRegFaceUserList(TRegFaceUser tRegFaceUser) {
+    	return new R<>(tRegFaceUserService.list());
+    }
 
     /**
      * 通过id查询注册人脸用户

@@ -1,5 +1,7 @@
 package com.bifangan.dmDemo.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -14,4 +16,6 @@ import com.bifangan.dmDemo.entity.TRegFaceUser;
 @Repository
 public interface TRegFaceUserMapper extends BaseMapper<TRegFaceUser> {
 
+	public List<TRegFaceUser> textFullSearchUser(String content);
+	
 }
