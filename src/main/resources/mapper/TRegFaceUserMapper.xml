@@ -45,6 +45,7 @@
 		<result property="faceId" column="face_id"/>
 		<result property="faceMachineIp" column="face_machine_ip"/>
 		<result property="isBlacklist" column="is_blacklist"/>
+		<result property="openId" column="openId" />
 	 </resultMap>
 	 
 	 <select id="textFullSearchUser">

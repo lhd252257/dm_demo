@@ -27,6 +27,7 @@
 		<result property="outFaceId"
 			column="out_face_id" />
 		<result property="counter" column="counter" />
+		<result property="electricCount" column="electricCount"/>
 	</resultMap>
 
 	<select id="getInFaceIdByUserDeptId">
