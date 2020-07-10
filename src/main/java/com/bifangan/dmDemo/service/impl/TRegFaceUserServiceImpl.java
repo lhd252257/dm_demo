@@ -29,11 +29,13 @@ import com.bifangan.dmDemo.common.R;
 import com.bifangan.dmDemo.common.UUIDUtils;
 import com.bifangan.dmDemo.constant.CommonConstants;
 import com.bifangan.dmDemo.entity.TBedLogs;
+import com.bifangan.dmDemo.entity.TDept;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
 import com.bifangan.dmDemo.mapper.TBedLogsMapper;
 import com.bifangan.dmDemo.mapper.TDeptMapper;
 import com.bifangan.dmDemo.mapper.TRegFaceUserMapper;
 import com.bifangan.dmDemo.service.TRegFaceUserService;
+import com.bifangan.dmDemo.utils.FaceIdUtil;
 import com.bifangan.dmDemo.utils.FileUploadUtil;
 import com.bifangan.dmDemo.utils.HttpUtil;
 import com.bifangan.dmDemo.utils.ImageBase64Converter;
@@ -117,16 +119,29 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 		query.eq("id_card", user.getIdCard());
 		TRegFaceUser faceUser = tRegFaceUserMapper.selectOne(query);
 		
-		user.setFaceId(UUIDUtils.getUUID36());
+		TDept dept = tDeptMapper.selectById(user.getDeptId());
+		user.setInFaceDevice(dept.getInFaceMachineIp());
+		user.setOutFaceDevice(dept.getOutFaceMachineIp());
+		
+		user.setFaceId(FaceIdUtil.getFaceId(user.getName()));
 		
 		MultipartFile photo = user.getPhotoFile();
-		boolean isUpload = FileUploadUtil.upload(photo);
-		if(isUpload) {
-			if(regUser(user)) {
-				if(faceUser == null) {
-					return retBool(baseMapper.insert(user));
-				} else {
-					return retBool(baseMapper.updateById(user));
+		if(photo != null) {
+			String filePath = FileUploadUtil.upload(photo);
+			if(!"null".equals(filePath) && !"error".equals(filePath)) {
+				user.setPhoto(filePath);
+				if(regUser(user)) {
+					try {
+						faceUser = (TRegFaceUser) user.clone();
+					} catch (CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(null == faceUser.getId()) {
+						return tRegFaceUserMapper.insert(faceUser) > 0;
+					} else {
+						return tRegFaceUserMapper.updateById(faceUser) > 0;
+					}
 				}
 			}
 		}
@@ -141,14 +156,15 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				
 		data.put("image", imageBase64); // 人脸照片的base64数据
 		data.put("id", user.getFaceId());	//人脸注册时的id
-		data.put("card", user.getIdCard());	// id卡的卡号
-		data.put("ip", user.getFaceMachineIp());	//注册的目标设备IP地址
-		
-		String responseBody = HttpUtil.doPost(CommonConstants.FACE_USER_ADD, JSON.toJSONString(data));
+		data.put("card", "");	// id卡的卡号
+		data.put("ip", user.getInFaceDevice());	//注册的目标设备IP地址
+		String params = JSON.toJSONString(data);
+		System.out.println(params);
+		String responseBody = HttpUtil.doPost(CommonConstants.FACE_USER_ADD, params);
 		
 		@SuppressWarnings("rawtypes")
 		Map result = (Map) JSON.parse(responseBody);
-		Integer code = (Integer) result.get("code");
+		Integer code = Integer.parseInt(result.get("code").toString());
 		if(code == 1) {
 			return true;
 		}

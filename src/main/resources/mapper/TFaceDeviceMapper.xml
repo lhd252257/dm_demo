@@ -21,9 +21,9 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.pig4cloud.pigx.generator.mapper.TFaceDeviceMapper">
+<mapper namespace="com.bifangan.dmDemo.mapper.TFaceDeviceMapper">
 
-  <resultMap id="tFaceDeviceMap" type="com.pig4cloud.pigx.generator.entity.TFaceDevice">
+  <resultMap id="tFaceDeviceMap" type="com.bifangan.dmDemo.entity.TFaceDevice">
                   <id property="id" column="id"/>
                         <result property="ip" column="ip"/>
                         <result property="subMask" column="sub_mask"/>

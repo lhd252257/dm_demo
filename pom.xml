@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.1.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bifangan</groupId>
 	<artifactId>dmDemo</artifactId>
@@ -32,12 +33,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			 <exclusions><!-- 去掉springboot默认配置 -->  
-		        <exclusion>  
-		            <groupId>org.springframework.boot</groupId>  
-		            <artifactId>spring-boot-starter-logging</artifactId>  
-		        </exclusion>  
-		    </exclusions>  
+			<exclusions><!-- 去掉springboot默认配置 -->
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -65,38 +66,38 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>druid-spring-boot-starter</artifactId>
-		    <version>1.1.22</version>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.1.22</version>
 		</dependency>
-		<!--mybatis-->
+		<!--mybatis -->
 		<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>${mybatis-plus.version}</version>
 		</dependency>
-		<dependency> <!-- 引入log4j2依赖 -->  
-		    <groupId>org.springframework.boot</groupId>  
-		    <artifactId>spring-boot-starter-log4j2</artifactId>  
-		</dependency> 
+		<dependency> <!-- 引入log4j2依赖 -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
 		<!-- excel 導入 -->
 		<dependency>
-		    <groupId>org.apache.poi</groupId>
-		    <artifactId>poi</artifactId>
-		    <version>4.1.2</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.poi</groupId>
-		    <artifactId>poi-ooxml</artifactId>
-		    <version>4.1.2</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.2</version>
 		</dependency>
-		<!--Lombok-->
+		<!--Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- http -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -110,7 +111,7 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
 		</dependency>
-		
+
 		<!-- 數據解析 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -125,6 +126,13 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.4</version>
+		</dependency>
+
+		<!--微信模版消息推送三方sdk -->
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-mp</artifactId>
+			<version>3.3.0</version>
 		</dependency>
 	</dependencies>
 

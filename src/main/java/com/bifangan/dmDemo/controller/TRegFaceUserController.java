@@ -73,7 +73,7 @@ public class TRegFaceUserController {
      * @return R
      */
     @PostMapping
-    public R save(@RequestBody RegFaceUserVO tRegFaceUser) {
+    public R save(RegFaceUserVO tRegFaceUser) {
         return new R<>(tRegFaceUserService.save(tRegFaceUser));
     }
 
@@ -160,4 +160,5 @@ public class TRegFaceUserController {
     public R refreshState() {
     	return new R<>(tRegFaceUserService.refreshState());
     }
+    
 }

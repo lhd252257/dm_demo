@@ -37,14 +37,14 @@ private static final long serialVersionUID = 1L;
     private String parentId;
    
     /**
-     * 进口人脸机ip
+     * 进口人脸机id
      */
-    private String inFaceMachineIp;
+    private String inFaceId;
     
     /**
-     * 出口人脸机ip
+     * 出口人脸机id
      */
-      private String outFaceMachineIp;
+      private String outFaceId;
     /**
    * 库存计数器
    */
@@ -53,5 +53,13 @@ private static final long serialVersionUID = 1L;
      * 剩余电量
      */
     private Integer electricCount;
+    /**
+     * 进口人脸机ip
+     */
+    private String inFaceMachineIp;
+    /**
+     * 出口人脸机ip
+     */
+    private String outFaceMachineIp;
   
 }

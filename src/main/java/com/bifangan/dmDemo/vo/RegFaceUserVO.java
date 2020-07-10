@@ -14,4 +14,9 @@ public class RegFaceUserVO extends TRegFaceUser {
 	     * 照片文件
 	     */
 	    private MultipartFile photoFile;
+	    
+	    private String inFaceDevice;
+	    
+	    private String outFaceDevice;
+	    
 }

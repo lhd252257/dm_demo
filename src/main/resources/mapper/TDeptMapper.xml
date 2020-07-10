@@ -15,10 +15,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.pig4cloud.pigx.generator.mapper.TDeptMapper">
+	namespace="com.bifangan.dmDemo.mapper.TDeptMapper">
 
 	<resultMap id="tDeptMap"
-		type="com.pig4cloud.pigx.generator.entity.TDept">
+		type="com.bifangan.dmDemo.entity.TDept">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="remarks" column="remarks" />
@@ -27,7 +27,9 @@
 		<result property="outFaceId"
 			column="out_face_id" />
 		<result property="counter" column="counter" />
-		<result property="electricCount" column="electricCount"/>
+		<result property="electricCount" column="electric_count"/>
+		<result property="inFaceMachineIp" column="in_face_machine_ip"/>
+		<result property="outFaceMachineIp" column="out_face_machine_ip"/>
 	</resultMap>
 
 	<select id="getInFaceIdByUserDeptId">

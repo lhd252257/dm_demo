@@ -50,5 +50,7 @@ public interface CommonConstants {
 	Integer FAIL = 1;
 
 	String FACE_USER_ADD = "http://127.0.0.1:2010/add_user";
+//	String FACE_USER_ADD = "http://183.237.218.134:2010/add_user";
+	
 
 }

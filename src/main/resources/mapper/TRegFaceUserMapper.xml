@@ -21,9 +21,9 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.pig4cloud.pigx.generator.mapper.TRegFaceUserMapper">
+<mapper namespace="com.bifangan.dmDemo.mapper.TRegFaceUserMapper">
 
-	<resultMap id="tRegFaceUserMap" type="com.pig4cloud.pigx.generator.entity.TRegFaceUser">
+	<resultMap id="tRegFaceUserMap" type="com.bifangan.dmDemo.entity.TRegFaceUser">
 		<id property="id" column="id"/>
 		<result property="name" column="name"/>
 		<result property="deptId" column="dept_id"/>
@@ -45,7 +45,7 @@
 		<result property="faceId" column="face_id"/>
 		<result property="faceMachineIp" column="face_machine_ip"/>
 		<result property="isBlacklist" column="is_blacklist"/>
-		<result property="openId" column="openId" />
+		<result property="openId" column="open_id" />
 	 </resultMap>
 	 
 	 <select id="textFullSearchUser">
