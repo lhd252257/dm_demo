@@ -49,5 +49,9 @@ private static final long serialVersionUID = 1L;
    * 库存计数器
    */
     private Integer counter;
+    /**
+     * 剩余电量
+     */
+    private Integer electricCount;
   
 }

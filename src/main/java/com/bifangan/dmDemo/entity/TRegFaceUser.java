@@ -106,6 +106,10 @@ public class TRegFaceUser extends Model<TRegFaceUser> implements Cloneable {
    * 是否是黑名单 1:是黑名单  0:不是黑名单
    */
     private Integer isBlacklist;
+    /**
+     * 用户微信的openId
+     */
+    private String openId;
   
     @Override
 	public Object clone() throws CloneNotSupportedException {

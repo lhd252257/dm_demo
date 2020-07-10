@@ -68,5 +68,9 @@ private static final long serialVersionUID = 1L;
    * 通行时段
    */
     private LocalDateTime passageTime;
+    /**
+     * 判断进口人脸机还是出口人脸机(1:进，2:出)
+     */
+    private int isIo;
   
 }
