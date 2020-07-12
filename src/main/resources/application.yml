@@ -19,3 +19,6 @@ spring:
 
 mybatis-plus: 
   mapper-locations: classpath:/mapper/**.xml
+
+user_id: 5f07fb5f5feb6b29f8f39b48
+secret: 984f3736301841858b691b52226d4ef4
