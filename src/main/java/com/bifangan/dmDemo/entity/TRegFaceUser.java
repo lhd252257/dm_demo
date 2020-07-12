@@ -19,9 +19,12 @@ import lombok.EqualsAndHashCode;
 @TableName("t_reg_face_user")
 @EqualsAndHashCode(callSuper = true)
 public class TRegFaceUser extends Model<TRegFaceUser> implements Cloneable {
-	private static final long serialVersionUID = 1L;
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5836150480617347449L;
+	/**
    * id
    */
     @TableId

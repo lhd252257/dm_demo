@@ -2,8 +2,6 @@ package com.bifangan.dmDemo.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +29,7 @@ import com.bifangan.dmDemo.constant.CommonConstants;
 import com.bifangan.dmDemo.entity.TBedLogs;
 import com.bifangan.dmDemo.entity.TDept;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
+import com.bifangan.dmDemo.global.CounterGlobal;
 import com.bifangan.dmDemo.mapper.TBedLogsMapper;
 import com.bifangan.dmDemo.mapper.TDeptMapper;
 import com.bifangan.dmDemo.mapper.TRegFaceUserMapper;
@@ -39,6 +38,8 @@ import com.bifangan.dmDemo.utils.FaceIdUtil;
 import com.bifangan.dmDemo.utils.FileUploadUtil;
 import com.bifangan.dmDemo.utils.HttpUtil;
 import com.bifangan.dmDemo.utils.ImageBase64Converter;
+import com.bifangan.dmDemo.utils.ObjectUtil;
+import com.bifangan.dmDemo.vo.FaceDeviceAuthVO;
 import com.bifangan.dmDemo.vo.RegFaceUserVO;
 
 /**
@@ -61,11 +62,10 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 	private TDeptMapper tDeptMapper;
 	
 	@Override
-	public R blacklist(Map param) {
+	public R blacklist(FaceDeviceAuthVO fda) {
 		QueryWrapper<TRegFaceUser> query = new QueryWrapper<>();
-		query.eq("faceid", param.get("faceid"));
+		query.eq("face_id", fda.getSrc().getFaceid());
 		TRegFaceUser faceUser = tRegFaceUserMapper.selectOne(query);
-		
 		R result = new R();
 		
 		if(faceUser != null) {
@@ -74,17 +74,24 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 			} else {
 				result.setCode(1);
 				
+				TDept dept = tDeptMapper.selectById(faceUser.getDeptId());
+				
 				Date nowDate = new Date();
 				TBedLogs bedLogs = new TBedLogs();
+				bedLogs.setId(UUIDUtils.getUUID36());
 				bedLogs.setUserId(faceUser.getId());
 				bedLogs.setUserName(faceUser.getName());
 				bedLogs.setDeptId(faceUser.getDeptId());
 				bedLogs.setDept(faceUser.getDept());
 				bedLogs.setFaceid(faceUser.getFaceId());
-				bedLogs.setDeviceId((String)param.get("ID"));
+				bedLogs.setDeviceId(fda.getID());
 				bedLogs.setIoTime(nowDate);
 				// 1进 2出
-				bedLogs.setIoFlag(1);
+				if(fda.getID().equals(dept.getInFaceId())) {
+					bedLogs.setIoFlag(1);
+				} else {
+					bedLogs.setIoFlag(2);
+				}
 				
 				Calendar startCalendar = Calendar.getInstance();
 				startCalendar.setTime(nowDate);
@@ -99,12 +106,34 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				startCalendar.set(Calendar.SECOND, 0);
 				if(nowDate.compareTo(startCalendar.getTime()) > 1 && nowDate.compareTo(endCalendar.getTime()) <1) {
 					// 晚归
-					bedLogs.setBedState(1);
+					bedLogs.setBedState(2);
 				} else {
 					// 在寝
-					bedLogs.setBedState(2);
+					bedLogs.setBedState(1);
 				}
 				tBedLogsMapper.insert(bedLogs);
+				
+				// 计数器，判断宿舍人员是否有人
+				Integer counter = CounterGlobal.get(faceUser.getDeptId());
+				if(bedLogs.getIoFlag() == 1) {
+					System.out.println("counter:"+counter);
+					if(counter == 0) {
+						// TODO 宿舍送电
+						System.out.println(faceUser.getDept() + "===========================送电");
+					}
+					CounterGlobal.put(faceUser.getDeptId(), ++counter);
+					System.out.println("counter:"+counter);
+				} else {
+					System.out.println("counter:"+counter);
+					if(counter != 0) {
+						CounterGlobal.put(faceUser.getDeptId(), --counter);
+					}
+					if(counter == 0) {
+						// TODO 宿舍断电
+						System.out.println(faceUser.getDept() + "===========================断电");
+					}
+					System.out.println("counter:"+counter);
+				}
 			}
 		}
 		return result;
@@ -132,12 +161,15 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				user.setPhoto(filePath);
 				if(regUser(user)) {
 					try {
-						faceUser = (TRegFaceUser) user.clone();
-					} catch (CloneNotSupportedException e) {
+						if(faceUser == null)
+							faceUser = new TRegFaceUser();
+						ObjectUtil.cpoyObjAttr(user, faceUser, TRegFaceUser.class);
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					if(null == faceUser.getId()) {
+						faceUser.setId(UUIDUtils.getUUID36());
 						return tRegFaceUserMapper.insert(faceUser) > 0;
 					} else {
 						return tRegFaceUserMapper.updateById(faceUser) > 0;
@@ -166,7 +198,23 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 		Map result = (Map) JSON.parse(responseBody);
 		Integer code = Integer.parseInt(result.get("code").toString());
 		if(code == 1) {
-			return true;
+			Map<String, Object> data1 = new HashMap<String, Object>();
+			
+					
+			data1.put("image", imageBase64); // 人脸照片的base64数据
+			data1.put("id", user.getFaceId());	//人脸注册时的id
+			data1.put("card", "");	// id卡的卡号
+			data1.put("ip", user.getOutFaceDevice());
+			String params1 = JSON.toJSONString(data1);
+			System.out.println(params1);
+			String responseBody1 = HttpUtil.doPost(CommonConstants.FACE_USER_ADD, params1);
+			
+			@SuppressWarnings("rawtypes")
+			Map result1 = (Map) JSON.parse(responseBody1);
+			Integer code1 = Integer.parseInt(result1.get("code").toString());
+			if(code1 == 1) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -322,7 +370,27 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 
 	@Override
 	public List<TRegFaceUser> textFullSearch(String content) {
-		return tRegFaceUserMapper.textFullSearchUser(content);
+		QueryWrapper<TRegFaceUser> wrapper = new QueryWrapper<TRegFaceUser>();
+		if(content != null && !content.isEmpty()) {
+			wrapper.like("name", content);
+			wrapper.or();
+			wrapper.like("job_number", content);
+			wrapper.or();
+			wrapper.like("phone", content);
+			wrapper.or();
+			wrapper.like("address", content);
+			wrapper.or();
+			wrapper.like("id_card", content);
+		}
+		
+		return tRegFaceUserMapper.selectList(wrapper);
+	}
+
+	@Override
+	public List<TRegFaceUser> getblackList() {
+		QueryWrapper<TRegFaceUser> wrapper = new QueryWrapper<TRegFaceUser>();
+		wrapper.eq("is_blacklist", 1);
+		return tRegFaceUserMapper.selectList(wrapper);
 	}
 	
 }

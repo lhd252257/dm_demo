@@ -2,6 +2,7 @@ package com.bifangan.dmDemo.controller;
 
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bifangan.dmDemo.common.R;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
 import com.bifangan.dmDemo.service.TRegFaceUserService;
+import com.bifangan.dmDemo.vo.FaceDeviceAuthVO;
 import com.bifangan.dmDemo.vo.RegFaceUserVO;
 
 
@@ -52,9 +55,10 @@ public class TRegFaceUserController {
         return new R<>(tRegFaceUserService.page(page, Wrappers.query(tRegFaceUser)));
     }
 
-    @PostMapping("/list")
-    public R getTRegFaceUserList(TRegFaceUser tRegFaceUser) {
-    	return new R<>(tRegFaceUserService.list());
+    @GetMapping("/list")
+    public R getTRegFaceUserList(String content) {
+    	List<TRegFaceUser> textFullSearch = tRegFaceUserService.textFullSearch(content);
+    	return new R<>(textFullSearch);
     }
 
     /**
@@ -100,10 +104,18 @@ public class TRegFaceUserController {
     
     
     @PostMapping("/blacklist")
-    public R blacklist(@RequestBody Map param) {
-    	return tRegFaceUserService.blacklist(param);
+    public R blacklist(@RequestBody String json) {
+    	FaceDeviceAuthVO fda = JSON.parseObject(json,FaceDeviceAuthVO.class);;
+    	return tRegFaceUserService.blacklist(fda);
     }
+//    public R blacklist(@RequestBody FaceDeviceAuthVO fda) {
+//    	return tRegFaceUserService.blacklist(fda);
+//    }
     
+    @GetMapping("/blacklist")
+    public R getBlackList() {
+    	return new R<>(tRegFaceUserService.getblackList());
+    }
     
     @RequestMapping("/updateExcel")
     public R updateExcel(@RequestParam(value="filename")MultipartFile file,HttpSession session) {
@@ -125,7 +137,7 @@ public class TRegFaceUserController {
     
     @RequestMapping("/downloadExcel")
 	@ResponseBody
-	public R downloadExcel(HttpServletResponse response,HttpServletRequest request) {
+	public void downloadExcel(HttpServletResponse response,HttpServletRequest request) {
 		//方法一：直接下载路径下的文件模板
 		try {
             //获取要下载的模板名称
@@ -146,9 +158,10 @@ public class TRegFaceUserController {
             //修正 Excel在“xxx.xlsx”中发现不可读取的内容。是否恢复此工作薄的内容？如果信任此工作簿的来源，请点击"是"
             response.setHeader("Content-Length", String.valueOf(input.getChannel().size()));
             input.close();
-            return new R<>("应用导入模板下载完成！");
+//            return new R<>("应用导入模板下载完成！");
         } catch (Exception ex) {
-            return new R<>("应用导入模板下载失败！");
+        	ex.printStackTrace();
+//            return new R<>("应用导入模板下载失败！");
         }
     }
     

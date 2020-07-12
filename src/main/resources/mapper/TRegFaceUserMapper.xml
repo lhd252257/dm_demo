@@ -48,12 +48,14 @@
 		<result property="openId" column="open_id" />
 	 </resultMap>
 	 
-	 <select id="textFullSearchUser">
+	 <select id="textFullSearchUser" resultType="com.bifangan.dmDemo.entity.TRegFaceUser">
 		SELECT
 			* 
 		FROM
 			t_reg_face_user 
-		WHERE
-			MATCH ( `name`, `job_number`, `phone`, `address`, `id_card` ) AGAINST ( '"${content}"' IN NATURAL LANGUAGE MODE );
+		<if test="content != null and content != ''">
+			WHERE
+				MATCH ( `name`, `job_number`, `phone`, `address`, `id_card` ) AGAINST ( '"#{content}"' IN NATURAL LANGUAGE MODE )
+		</if>
 	 </select>
 </mapper>

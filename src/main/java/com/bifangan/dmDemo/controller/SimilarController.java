@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bifangan.dmDemo.common.R;
 import com.bifangan.dmDemo.service.SimilarService;
@@ -32,9 +34,9 @@ public class SimilarController {
      * @param candi  目标图url
      * @return 整形数字，数字小于10说明二者相似度越高
      */
-    @GetMapping("/similar")
-    public R imageSimilar(@RequestParam(value = "candi", required = true) String candi) {
-    	return new R<>(similarService.imageSimilar(candi));
+    @PostMapping("/similar")
+    public R imageSimilar(MultipartFile file) {
+    	return new R<>(similarService.imageSimilar(file));
     }
 
 

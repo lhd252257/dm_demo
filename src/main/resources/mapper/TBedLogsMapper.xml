@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  ~
-  ~      Copyright (c) 2018-2025, lengleng All rights reserved.
-  ~
-  ~  Redistribution and use in source and binary forms, with or without
-  ~  modification, are permitted provided that the following conditions are met:
-  ~
-  ~ Redistributions of source code must retain the above copyright notice,
-  ~  this list of conditions and the following disclaimer.
-  ~  Redistributions in binary form must reproduce the above copyright
-  ~  notice, this list of conditions and the following disclaimer in the
-  ~  documentation and/or other materials provided with the distribution.
-  ~  Neither the name of the pig4cloud.com developer nor the names of its
-  ~  contributors may be used to endorse or promote products derived from
-  ~  this software without specific prior written permission.
-  ~  Author: lengleng (wangiegie@gmail.com)
-  ~
-  -->
+<!-- ~ ~ Copyright (c) 2018-2025, lengleng All rights reserved. ~ ~ Redistribution 
+	and use in source and binary forms, with or without ~ modification, are permitted 
+	provided that the following conditions are met: ~ ~ Redistributions of source 
+	code must retain the above copyright notice, ~ this list of conditions and 
+	the following disclaimer. ~ Redistributions in binary form must reproduce 
+	the above copyright ~ notice, this list of conditions and the following disclaimer 
+	in the ~ documentation and/or other materials provided with the distribution. 
+	~ Neither the name of the pig4cloud.com developer nor the names of its ~ 
+	contributors may be used to endorse or promote products derived from ~ this 
+	software without specific prior written permission. ~ Author: lengleng (wangiegie@gmail.com) 
+	~ -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bifangan.dmDemo.mapper.TBedLogsMapper">
 
-  <resultMap id="tBedLogsMap" type="com.bifangan.dmDemo.entity.TBedLogs">
-                  <id property="id" column="id"/>
-                        <result property="userId" column="user_id"/>
-                        <result property="userName" column="user_name"/>
-                        <result property="deptId" column="dept_id"/>
-                        <result property="dept" column="dept"/>
-                        <result property="faceid" column="faceid"/>
-                        <result property="deviceId" column="deviceId" />
-                        <result property="ioTime" column="io_time"/>
-                        <result property="ioFlag" column="io_flag"/>
-                        <result property="bedState" column="bed_state"/>
-            </resultMap>
+	<resultMap id="tBedLogsMap"
+		type="com.bifangan.dmDemo.entity.TBedLogs">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="deptId" column="dept_id" />
+		<result property="dept" column="dept" />
+		<result property="faceid" column="faceid" />
+		<result property="deviceId" column="deviceId" />
+		<result property="iTime" column="i_time" />
+		<result property="oTime" column="o_time" />
+		<result property="ioFlag" column="io_flag" />
+		<result property="bedState" column="bed_state" />
+	</resultMap>
 </mapper>

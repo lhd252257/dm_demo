@@ -10,7 +10,7 @@ import lombok.Data;
 public class RegFaceUserVO extends TRegFaceUser {
 
 	    
-	    /**
+		/**
 	     * 照片文件
 	     */
 	    private MultipartFile photoFile;

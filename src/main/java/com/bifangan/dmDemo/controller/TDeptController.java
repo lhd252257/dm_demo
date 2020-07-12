@@ -81,6 +81,8 @@ public class TDeptController {
         return new R<>(tDeptService.removeById(id));
     }
 
+    
+//    public R 
 //    @RequestMapping("/relationFaceDevice")
 //    public R relationFaceDevice(@PathVariable) {
 //    	

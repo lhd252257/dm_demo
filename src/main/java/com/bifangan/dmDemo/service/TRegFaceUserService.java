@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bifangan.dmDemo.common.R;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
+import com.bifangan.dmDemo.vo.FaceDeviceAuthVO;
 import com.bifangan.dmDemo.vo.RegFaceUserVO;
 
 /**
@@ -19,7 +20,7 @@ import com.bifangan.dmDemo.vo.RegFaceUserVO;
  */
 public interface TRegFaceUserService extends IService<TRegFaceUser> {
 
-	public R blacklist(Map param);
+	public R blacklist(FaceDeviceAuthVO fda);
 	
 	public boolean regUser(RegFaceUserVO user);
 
@@ -30,4 +31,6 @@ public interface TRegFaceUserService extends IService<TRegFaceUser> {
 	public int refreshState();
 	
 	public List<TRegFaceUser> textFullSearch(String content);
+	
+	public List<TRegFaceUser> getblackList();
 }

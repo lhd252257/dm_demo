@@ -1,19 +1,18 @@
 package com.bifangan.dmDemo.service.impl;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ibatis.annotations.AutomapConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
 import com.bifangan.dmDemo.mapper.TRegFaceUserMapper;
 import com.bifangan.dmDemo.service.SimilarService;
+import com.bifangan.dmDemo.utils.FileUploadUtil;
 import com.bifangan.dmDemo.utils.image.similarity.ImageHanmingUtil;
 
 @Service
@@ -23,8 +22,14 @@ public class SimilarServiceImpl implements SimilarService{
 	private TRegFaceUserMapper tRegFaceUserMapper;
 	
 	@Override
-	public TRegFaceUser imageSimilar(String candi) {
+	public TRegFaceUser imageSimilar(MultipartFile file) {
+		// TODU 
 		TRegFaceUser result = null;
+		
+		String candi = FileUploadUtil.upload(file);
+		if("error".equals(candi)) {
+			return result;
+		}
 		
 		QueryWrapper<TRegFaceUser> queryWrapper = new QueryWrapper<TRegFaceUser>();
 		List<TRegFaceUser> userList = tRegFaceUserMapper.selectList(queryWrapper);
@@ -35,7 +40,7 @@ public class SimilarServiceImpl implements SimilarService{
 				int distence = 0;
 				TRegFaceUser user = iterator.next();
 				try {
-					distence = hanmingHash.distance(new URL(user.getPhoto()), new URL(candi));
+					distence = hanmingHash.distance(new URL("file://" + user.getPhoto()), new URL("file://" + candi));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
