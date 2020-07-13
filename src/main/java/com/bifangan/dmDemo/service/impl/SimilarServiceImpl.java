@@ -1,5 +1,9 @@
 package com.bifangan.dmDemo.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -29,27 +33,37 @@ public class SimilarServiceImpl extends ServiceImpl<SimilarMapper, Similar> impl
 		// TODU 
 		TRegFaceUser result = null;
 		
-		String candi = FileUploadUtil.upload(file);
-		if("error".equals(candi)) {
-			return result;
-		}
-		
 		QueryWrapper<TRegFaceUser> queryWrapper = new QueryWrapper<TRegFaceUser>();
 		List<TRegFaceUser> userList = tRegFaceUserMapper.selectList(queryWrapper);
 		if(userList != null && !userList.isEmpty()) {
 			ImageHanmingUtil hanmingHash = new ImageHanmingUtil();
-			int maxDistence = 0;
+			int minDistence = 0;
 			for(Iterator<TRegFaceUser> iterator = userList.iterator();iterator.hasNext();) {
 				int distence = 0;
 				TRegFaceUser user = iterator.next();
+				if(user.getPhoto() == null) {
+					continue;
+				}
+				File photo = new File(user.getPhoto());
+				FileInputStream fileis = null;
 				try {
-					distence = hanmingHash.distance(new URL("file://" + user.getPhoto()), new URL("file://" + candi));
+					fileis = new FileInputStream(photo);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					distence = hanmingHash.distance(fileis, file.getInputStream());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(distence > maxDistence) {
-					maxDistence = distence;
+				if(minDistence == 0) {
+					minDistence = distence;
+					result = user;
+				}
+				if(distence < minDistence) {
+					minDistence = distence;
 					result = user;
 				}
 			}

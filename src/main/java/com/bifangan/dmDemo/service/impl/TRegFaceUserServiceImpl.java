@@ -319,6 +319,7 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				
 				if(tBedLogs == null || tBedLogs.isEmpty()) {
 					TBedLogs bedLogs = new TBedLogs();
+					bedLogs.setId(UUIDUtils.getUUID36());
 					bedLogs.setUserId(user.getId());
 					bedLogs.setUserName(user.getName());
 					bedLogs.setDeptId(user.getDeptId());

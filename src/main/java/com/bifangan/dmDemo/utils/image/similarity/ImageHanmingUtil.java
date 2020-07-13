@@ -187,9 +187,9 @@ public class ImageHanmingUtil {
      * @return 值越小相识度越高，10之内可以简单判断这两张图片内容一致
      * @throws Exception
      */
-    public int distance(URL srcUrl, URL canUrl) throws Exception {
-        String imgStr = this.getHash(srcUrl.openStream());
-        String canStr = this.getHash(canUrl.openStream());
+    public int distance(InputStream srcUrl, InputStream canUrl) throws Exception {
+        String imgStr = this.getHash(srcUrl);
+        String canStr = this.getHash(canUrl);
         return this.distance(imgStr, canStr);
     }
 
