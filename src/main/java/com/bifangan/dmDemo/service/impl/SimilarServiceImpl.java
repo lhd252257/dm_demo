@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class SimilarServiceImpl extends ServiceImpl<SimilarMapper, Similar> impl
 	private TRegFaceUserMapper tRegFaceUserMapper;
 	
 	@Override
-	public TRegFaceUser imageSimilar(MultipartFile file) {
+	public List<TRegFaceUser> imageSimilar(MultipartFile file) {
 		// TODU 
-		TRegFaceUser result = null;
+		List<TRegFaceUser> result = new ArrayList<TRegFaceUser>();
 		
 		QueryWrapper<TRegFaceUser> queryWrapper = new QueryWrapper<TRegFaceUser>();
 		List<TRegFaceUser> userList = tRegFaceUserMapper.selectList(queryWrapper);
@@ -54,17 +55,25 @@ public class SimilarServiceImpl extends ServiceImpl<SimilarMapper, Similar> impl
 				}
 				try {
 					distence = hanmingHash.distance(fileis, file.getInputStream());
+					if(minDistence == 0) {
+						minDistence = distence;
+						if(result.isEmpty()) {
+							result.add(user);
+						} else {
+							result.set(0, user);
+						}
+					}
+					if(distence < minDistence) { 
+						if(result.isEmpty()) {
+							result.add(user);
+						} else {
+							result.set(0, user);
+						}
+						minDistence = distence;
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				if(minDistence == 0) {
-					minDistence = distence;
-					result = user;
-				}
-				if(distence < minDistence) {
-					minDistence = distence;
-					result = user;
 				}
 			}
 		}
