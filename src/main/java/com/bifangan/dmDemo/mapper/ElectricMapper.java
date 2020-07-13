@@ -1,6 +1,7 @@
 package com.bifangan.dmDemo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bifangan.dmDemo.entity.ControllerIdAndLineNo;
 import com.bifangan.dmDemo.entity.Electric;
 import com.bifangan.dmDemo.entity.ElectricLine;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,8 @@ public interface ElectricMapper extends BaseMapper<Electric> {
     boolean updateLineStatusByLineId(String lineId);
 
     void insertLineRealtiming(ElectricLine lineRealtiming);
+
+    List<ElectricLine> electricLineList();
+
+    ControllerIdAndLineNo getControllerIdAndLineNoByDeptId(String deptId);
 }

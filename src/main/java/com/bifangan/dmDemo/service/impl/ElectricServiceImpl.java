@@ -55,6 +55,11 @@ public class ElectricServiceImpl implements ElectricService {
     }
 
     @Override
+    public List<ElectricLine> electricLineList() {
+        return electricMapper.electricLineList();
+    }
+
+    @Override
     public DeviceInfo selectDeviceInfo(String sn) {
 
         String nonce = getRandomString(6);
@@ -107,7 +112,9 @@ public class ElectricServiceImpl implements ElectricService {
 
 
     @Override
-        public String electricPowerOff(String controllerId, Integer lineNo, Integer status){
+        public String electricPowerOff(ElectricLine electricLine){
+
+        ControllerIdAndLineNo controllerIdAndLineNo = electricMapper.getControllerIdAndLineNoByDeptId(electricLine.getDeptId());
 
         String token = getToken(userId, secret);
 
@@ -115,9 +122,9 @@ public class ElectricServiceImpl implements ElectricService {
 
         LineStatus lineStatus = new LineStatus();
 
-        lineStatus.setLineNo(lineNo);
+        lineStatus.setLineNo(controllerIdAndLineNo.getLineNo());
 
-        lineStatus.setStatus(status);
+        lineStatus.setStatus(electricLine.getStatus());
 
         List<LineStatus> arrayList = new ArrayList<>();
 
@@ -129,7 +136,7 @@ public class ElectricServiceImpl implements ElectricService {
 
         SortedMap<Object,Object> parameters = new TreeMap<>();
 
-        parameters.put("ControllerID", controllerId);
+        parameters.put("ControllerID", controllerIdAndLineNo.getControllerId());
 
         parameters.put("Lines", lines);
 
@@ -160,17 +167,17 @@ public class ElectricServiceImpl implements ElectricService {
             e.printStackTrace();
         }
 
-        System.out.println(authorization);
+        //System.out.println(authorization);
 
         LinesUpOrOff linesUpOrOff = new LinesUpOrOff();
 
-        linesUpOrOff.setControllerID(controllerId);
+        linesUpOrOff.setControllerID(controllerIdAndLineNo.getControllerId());
 
         linesUpOrOff.setLines(arrayList);
 
         String linesUpOrOffString = JSON.toJSONString(linesUpOrOff);
 
-        String put = HttpUtils.doPut("http://ex-api.jalasmart.com/api/v2/status/"+controllerId, authorization, linesUpOrOffString);
+        String put = HttpUtils.doPut("http://ex-api.jalasmart.com/api/v2/status/"+controllerIdAndLineNo.getControllerId(), authorization, linesUpOrOffString);
 
         JSONObject fromObject = JSONObject.parseObject(put);
 

@@ -17,11 +17,13 @@ public interface ElectricService {
 
     DeviceInfo selectDeviceInfo(String sn);
 
-    String electricPowerOff(String controllerId, Integer lineNo, Integer status);
+    String electricPowerOff(ElectricLine electricLine);
 
     ElectricLine selectLineByLineId(String lineId);
 
     boolean updateLineStatusByLineId(String lineId);
 
     void insertLineRealtiming(ElectricLine lineRealtiming);
+
+    List<ElectricLine> electricLineList();
 }

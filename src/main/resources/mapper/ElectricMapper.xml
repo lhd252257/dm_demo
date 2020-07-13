@@ -40,6 +40,31 @@
 		WHERE
 		did = #{did}
 	</select>
+	<select id="electricLineList" resultType="com.bifangan.dmDemo.entity.ElectricLine">
+		SELECT
+		a.id,
+		a.line_id AS lineId,
+		a.line_status AS lineStatus,
+		a.status,
+		b.`name` as dname
+		FROM
+		`t_line` a
+		LEFT JOIN
+		t_dept b
+		ON a.dept_id = b.id
+	</select>
+	<select id="getControllerIdAndLineNoByDeptId" resultType="com.bifangan.dmDemo.entity.ControllerIdAndLineNo">
+		SELECT
+		a.line_no as lineNo,
+		b.controller_id AS controllerId
+		FROM
+		`t_line` a
+		LEFT JOIN
+		t_device b
+		ON a.did = b.id
+		where
+		a.dept_id = #{deptId}
+	</select>
 	<select id="selectLineByLineId" resultType="com.bifangan.dmDemo.entity.ElectricLine">
 		SELECT
 		id,
@@ -70,10 +95,11 @@
 		temp,
 		leakage,
 		power,
-		`status`
+		`status`,
+		append_time as appendTime
 		FROM
-		`t_line_realtimingdata`;
+		`t_line_realtimingdata`
 		WHERE
-		lid = #{lid}
+		lid = #{lid} and to_days(append_time) = to_days(now())
 	</select>
 </mapper>

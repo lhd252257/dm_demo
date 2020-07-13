@@ -57,4 +57,8 @@ public class ElectricLine {
 
     private Date appendTime;
 
+    private String dname;
+
+    private String deptId;
+
 }
