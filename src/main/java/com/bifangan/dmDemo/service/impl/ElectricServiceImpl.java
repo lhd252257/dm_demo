@@ -2,6 +2,7 @@ package com.bifangan.dmDemo.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bifangan.dmDemo.entity.*;
 import com.bifangan.dmDemo.mapper.ElectricMapper;
 import com.bifangan.dmDemo.service.ElectricService;
@@ -108,7 +109,7 @@ public class ElectricServiceImpl implements ElectricService {
 
 
     @Override
-        public boolean electricPowerOff(String controllerId, Integer lineNo, Integer status){
+        public String electricPowerOff(String controllerId, Integer lineNo, Integer status){
 
         String token = getToken(userId, secret);
 
@@ -171,11 +172,13 @@ public class ElectricServiceImpl implements ElectricService {
 
         String linesUpOrOffString = JSON.toJSONString(linesUpOrOff);
 
-        String doPut2 = HttpUtils.doPut("http://ex-api.jalasmart.com/api/v2/status/"+controllerId, authorization, linesUpOrOffString);
+        String put = HttpUtils.doPut("http://ex-api.jalasmart.com/api/v2/status/"+controllerId, authorization, linesUpOrOffString);
 
-        System.out.println(doPut2);
+        JSONObject fromObject = JSONObject.parseObject(put);
 
-        return false;
+        String string = fromObject.get("Data").toString();
+
+        return string;
     }
 
 

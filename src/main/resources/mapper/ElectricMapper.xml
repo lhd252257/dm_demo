@@ -59,7 +59,7 @@
 		where line_id = #{lineId}
 	</update>
 	<insert id="insertLineRealtiming" parameterType="com.bifangan.dmDemo.entity.ElectricLine">
-	   INSERT INTO t_line_realtimingdata (id,lid,voltage,current,temp,leakage,power,status) VALUES (#{id},#{lid},#{voltage},#{current},#{temp},#{leakage},#{power},#{status});
+	   INSERT INTO t_line_realtimingdata (id,lid,voltage,current,temp,leakage,power,status,append_time) VALUES (#{id},#{lid},#{voltage},#{current},#{temp},#{leakage},#{power},#{status},#{appendTime});
 	</insert>
 	<select id="lineRealtimingdataByLineId" resultType="com.bifangan.dmDemo.entity.ElectricLine">
 		SELECT

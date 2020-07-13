@@ -2,6 +2,8 @@ package com.bifangan.dmDemo.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class ElectricLine {
 
@@ -52,5 +54,7 @@ public class ElectricLine {
     private Integer Duration; //过流持续时间*/
 
    private String lid;
+
+    private Date appendTime;
 
 }

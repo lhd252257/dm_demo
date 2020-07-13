@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public class Scheduler{
     //每隔2秒执行一次
     @Scheduled(fixedRate = 200000)
     public void selectDeviceLinesInfo() {
-        String sn = "J2611612911115";
+        String sn = "J191291273418";
         ElectricService electricService = (ElectricService) ApplicationContextUtil.getBean("electricServiceImpl");
         DeviceInfo deviceInfo = electricService.selectDeviceInfo(sn);
 
@@ -50,6 +51,8 @@ public class Scheduler{
                 lineRealtiming.setPower(Line.getPower());
 
                 lineRealtiming.setStatus(Line.getStatus());
+
+                lineRealtiming.setAppendTime(new Date());
 
                 electricService.insertLineRealtiming(lineRealtiming);
 

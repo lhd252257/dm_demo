@@ -19,6 +19,7 @@ public class LinesUpOrOff {
 		ControllerID = controllerID;
 	}
 
+	@JSONField(name = "Lines")
 	public List<LineStatus> getLines() {
 		return Lines;
 	}
