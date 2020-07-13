@@ -60,13 +60,71 @@ public class ElectricServiceImpl implements ElectricService {
     }
 
     @Override
-    public DeviceInfo selectDeviceInfo(String sn) {
-
+    public DeviceInfo selectDeviceEnergy(String deviceId, Integer startTime, Integer timeStamp) {
         String nonce = getRandomString(6);
 
         String token = getToken(userId, secret);
 
-        int timeStamp = getSecondTimestamp(new Date());
+        SortedMap<Object,Object> parameters = new TreeMap<>();
+
+        parameters.put("DeviceID", deviceId);
+
+        parameters.put("StartTime", startTime);
+
+        parameters.put("EndTime", timeStamp);
+
+        parameters.put("Nonce", nonce);
+
+        parameters.put("TimeStamp", String.valueOf(timeStamp));
+
+        parameters.put("UserID", userId);
+
+        String signature = createSign(parameters, token);
+
+        UserInfo userInfo = new UserInfo();
+
+        userInfo.setUserID(userId);
+
+        userInfo.setNonce(nonce);
+
+        userInfo.setTimeStamp(String.valueOf(timeStamp));
+
+        userInfo.setSignature(signature);
+
+        String jsonString = JSON.toJSONString(userInfo);
+
+        String authorization = null;
+        try {
+            authorization = Base64.getEncoder().encodeToString(jsonString.getBytes("gb2312"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String get = HttpUtils.doGet("http://ex-api.jalasmart.com/api/v2/energy/"+deviceId+"/"+startTime+"/"+timeStamp,authorization);
+
+        JSONObject fromObject = JSONObject.parseObject(get);
+
+        String string = fromObject.get("Data").toString();
+
+        List<DeviceInfo> arrayList = com.alibaba.fastjson.JSONObject.parseArray(string,DeviceInfo.class);
+
+        //System.out.println(timeStamp+"----------------"+arrayList.size());
+        //System.out.println(string);
+
+        if(arrayList.size()>0){
+            return arrayList.get(0);
+        }else{
+            return null;
+        }
+
+    }
+
+    @Override
+    public DeviceInfo selectDeviceInfo(String sn,Integer timeStamp) {
+
+        String nonce = getRandomString(6);
+
+        String token = getToken(userId, secret);
 
         SortedMap<Object,Object> parameters = new TreeMap<>();
 
@@ -113,6 +171,8 @@ public class ElectricServiceImpl implements ElectricService {
 
     @Override
         public String electricPowerOff(ElectricLine electricLine){
+
+        electricMapper.updateStatusByDeptId(electricLine);
 
         ControllerIdAndLineNo controllerIdAndLineNo = electricMapper.getControllerIdAndLineNoByDeptId(electricLine.getDeptId());
 

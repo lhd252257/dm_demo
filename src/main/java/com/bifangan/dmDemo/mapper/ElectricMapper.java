@@ -25,4 +25,6 @@ public interface ElectricMapper extends BaseMapper<Electric> {
     List<ElectricLine> electricLineList();
 
     ControllerIdAndLineNo getControllerIdAndLineNoByDeptId(String deptId);
+
+    boolean updateStatusByDeptId(ElectricLine electricLine);
 }
