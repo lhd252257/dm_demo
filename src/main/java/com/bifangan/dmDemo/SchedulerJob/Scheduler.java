@@ -27,7 +27,6 @@ public class Scheduler{
         List<Lines> lines = deviceInfo.getLines();
 
         for (Lines Line:lines) {
-            System.out.println(Line);
             ElectricLine electricLine = electricService.selectLineByLineId(Line.getLineID());
             //线路离线后及时更改线路表线路状态
             if(electricLine != null){

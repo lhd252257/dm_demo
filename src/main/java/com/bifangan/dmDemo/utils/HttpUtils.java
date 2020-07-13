@@ -45,7 +45,7 @@ public class HttpUtils {
             httpResponse = httpClient.execute(httpGet);
             HttpEntity entity = httpResponse.getEntity();
             String result = EntityUtils.toString(entity);
-            logger.info("请求成功");
+            //logger.info("请求成功");
             return result;
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block

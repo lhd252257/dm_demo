@@ -2,7 +2,6 @@ package com.bifangan.dmDemo.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bifangan.dmDemo.entity.*;
 import com.bifangan.dmDemo.mapper.ElectricMapper;
 import com.bifangan.dmDemo.service.ElectricService;
@@ -10,7 +9,6 @@ import com.bifangan.dmDemo.utils.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
@@ -217,7 +215,7 @@ public class ElectricServiceImpl implements ElectricService {
         //System.out.println("字符串:"+sb.toString());
         sbkey=sbkey.append("Token="+key);
         //MD5加密,结果转换为大写字符
-        System.out.println("MD5加密前:  "+sbkey.toString());
+        //System.out.println("MD5加密前:  "+sbkey.toString());
         String signature = MD5Utils.encrypt32(sbkey.toString());
         return signature;
     }
