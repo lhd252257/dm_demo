@@ -83,8 +83,13 @@
 		set line_status = 0
 		where line_id = #{lineId}
 	</update>
+	<update id="updateStatusByDeptId" parameterType="com.bifangan.dmDemo.entity.ElectricLine">
+		update t_line
+		set status = #{status}
+		where dept_id = #{deptId}
+	</update>
 	<insert id="insertLineRealtiming" parameterType="com.bifangan.dmDemo.entity.ElectricLine">
-	   INSERT INTO t_line_realtimingdata (id,lid,voltage,current,temp,leakage,power,status,append_time) VALUES (#{id},#{lid},#{voltage},#{current},#{temp},#{leakage},#{power},#{status},#{appendTime});
+	   INSERT INTO t_line_realtimingdata (id,lid,voltage,current,temp,leakage,power,status,energy,append_time) VALUES (#{id},#{lid},#{voltage},#{current},#{temp},#{leakage},#{power},#{status},#{energy},#{appendTime});
 	</insert>
 	<select id="lineRealtimingdataByLineId" resultType="com.bifangan.dmDemo.entity.ElectricLine">
 		SELECT
@@ -96,6 +101,7 @@
 		leakage,
 		power,
 		`status`,
+		IFNULL(energy,0) as energy,
 		append_time as appendTime
 		FROM
 		`t_line_realtimingdata`

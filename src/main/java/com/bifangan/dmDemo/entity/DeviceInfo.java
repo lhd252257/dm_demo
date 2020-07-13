@@ -21,8 +21,37 @@ public class DeviceInfo {
 	private String Connect;
 	
 	private List<Lines> Lines;
-	
-	
+
+	private String EnergyID;
+
+	private String AddTime;
+
+	private String TimeStamp;
+	@JSONField(name = "EnergyID")
+	public String getEnergyID() {
+		return EnergyID;
+	}
+	@JSONField(name = "AddTime")
+	public String getAddTime() {
+		return AddTime;
+	}
+	@JSONField(name = "TimeStamp")
+	public String getTimeStamp() {
+		return TimeStamp;
+	}
+
+	public void setEnergyID(String energyID) {
+		EnergyID = energyID;
+	}
+
+	public void setAddTime(String addTime) {
+		AddTime = addTime;
+	}
+
+	public void setTimeStamp(String timeStamp) {
+		TimeStamp = timeStamp;
+	}
+
 	@JSONField(name = "$id")
 	public String get$id() {
 		return $id;

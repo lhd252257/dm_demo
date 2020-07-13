@@ -1,6 +1,9 @@
 package com.bifangan.dmDemo.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.poi.hpsf.Decimal;
+
+import java.math.BigDecimal;
 
 public class Lines {
 	
@@ -50,6 +53,15 @@ public class Lines {
 	
 	private Integer Duration; //过流持续时间
 
+	private BigDecimal Energy; //电能
+
+	@JSONField(name = "Energy")
+	public BigDecimal getEnergy() {
+		return Energy;
+	}
+	public void setEnergy(BigDecimal energy) {
+		Energy = energy;
+	}
 	@JSONField(name = "$id")
 	public String get$id() {
 		return $id;

@@ -42,6 +42,7 @@ public class HttpUtils {
 
         CloseableHttpResponse httpResponse = null;
         try {
+
             httpResponse = httpClient.execute(httpGet);
             HttpEntity entity = httpResponse.getEntity();
             String result = EntityUtils.toString(entity);

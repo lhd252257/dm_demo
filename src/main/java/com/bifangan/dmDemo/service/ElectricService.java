@@ -15,7 +15,7 @@ public interface ElectricService {
 
     List<ElectricLine> lineRealtimingdataByLineId(String lid);
 
-    DeviceInfo selectDeviceInfo(String sn);
+    DeviceInfo selectDeviceInfo(String sn ,Integer timeStamp);
 
     String electricPowerOff(ElectricLine electricLine);
 
@@ -26,4 +26,6 @@ public interface ElectricService {
     void insertLineRealtiming(ElectricLine lineRealtiming);
 
     List<ElectricLine> electricLineList();
+
+    DeviceInfo selectDeviceEnergy(String deviceId, Integer startTime, Integer timeStamp);
 }

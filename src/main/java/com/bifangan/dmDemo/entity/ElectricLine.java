@@ -2,6 +2,7 @@ package com.bifangan.dmDemo.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -60,5 +61,7 @@ public class ElectricLine {
     private String dname;
 
     private String deptId;
+
+    private BigDecimal energy;
 
 }
