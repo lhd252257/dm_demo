@@ -32,7 +32,7 @@
 		<result property="outFaceMachineIp" column="out_face_machine_ip"/>
 	</resultMap>
 
-	<select id="getInFaceIdByUserDeptId">
+	<select id="getInFaceIdByUserId" resultType="java.lang.String">
 		SELECT
 			dept.in_face_id 
 		FROM
@@ -41,6 +41,6 @@
 		WHERE
 			fuser.dept_id = dept.id
 		AND
-			fuser.id = ${userid}
+			fuser.id = #{userId}
 	</select>
 </mapper>

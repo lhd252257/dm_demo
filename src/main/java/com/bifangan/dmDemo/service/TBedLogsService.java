@@ -10,5 +10,4 @@ import com.bifangan.dmDemo.entity.TBedLogs;
  * @date 2020-07-02 16:39:00
  */
 public interface TBedLogsService extends IService<TBedLogs> {
-
 }

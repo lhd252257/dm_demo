@@ -118,7 +118,7 @@ public class TRegFaceUserController {
     }
     
     @RequestMapping("/updateExcel")
-    public R updateExcel(@RequestParam(value="filename")MultipartFile file,HttpSession session) {
+    public R updateExcel(@RequestParam(value="file")MultipartFile file,HttpSession session) {
     	int result = 0;
 		
 		try {
@@ -169,7 +169,7 @@ public class TRegFaceUserController {
      * 刷新滞留和未归日志
      * @return
      */
-    @RequestMapping("/refreshState")
+    @GetMapping("/refreshState")
     public R refreshState() {
     	return new R<>(tRegFaceUserService.refreshState());
     }

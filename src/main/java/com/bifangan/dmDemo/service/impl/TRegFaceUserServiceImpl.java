@@ -289,7 +289,7 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 		queryWrapper.eq("is_blacklist", 0);
 //		queryWrapper.notExists("select * from t_bed_logs where io_time between "+ startDate +" and " + endDate);
 		// 查询非黑名单注册用户
-		List<TRegFaceUser> userList = tRegFaceUserMapper.selectObjs(queryWrapper);
+		List<TRegFaceUser> userList = tRegFaceUserMapper.selectList(queryWrapper);
 		
 		Calendar endCalendar = Calendar.getInstance();
 		endCalendar.setTime(new Date());
@@ -314,8 +314,10 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				QueryWrapper<TBedLogs> wrapper = new QueryWrapper();
 				wrapper.eq("user_id", user.getId());
 				wrapper.between("io_time", startDate, endDate);
-				TBedLogs tBedLogs = tBedLogsMapper.selectOne(queryWrapper);
-				if(tBedLogs == null) {
+				wrapper.orderByDesc("io_time");
+				List<TBedLogs> tBedLogs = tBedLogsMapper.selectList(wrapper);
+				
+				if(tBedLogs == null || tBedLogs.isEmpty()) {
 					TBedLogs bedLogs = new TBedLogs();
 					bedLogs.setUserId(user.getId());
 					bedLogs.setUserName(user.getName());
@@ -327,18 +329,19 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 					tBedLogsMapper.insert(bedLogs);
 					result++;
 				} else {
-					String InFaceId = tDeptMapper.getInFaceIdByUserDeptId(user.getDeptId());
-					if(!tBedLogs.getDeviceId().equals(InFaceId)) {
+					TBedLogs tBedLog = tBedLogs.get(0);
+					String InFaceId = tDeptMapper.getInFaceIdByUserId(user.getId());
+					if(!tBedLog.getDeviceId().equals(InFaceId)) {
 						// 滞留
-						tBedLogs.setBedState(3);
-						tBedLogsMapper.updateById(tBedLogs);
+						tBedLog.setBedState(3);
+						tBedLogsMapper.updateById(tBedLog);
 						result++;
 					}
 				}
 			}
 		}
 		
-		return 0;
+		return result;
 	}
 
 	/**

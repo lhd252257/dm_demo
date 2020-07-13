@@ -1,5 +1,6 @@
 package com.bifangan.dmDemo.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -14,6 +15,6 @@ import com.bifangan.dmDemo.entity.TDept;
 @Repository
 public interface TDeptMapper extends BaseMapper<TDept> {
 	
-	public String getInFaceIdByUserDeptId(String userId);
+	public String getInFaceIdByUserId(@Param("userId") String userId);
 	
 }

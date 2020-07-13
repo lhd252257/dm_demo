@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bifangan.dmDemo.entity.Similar;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
+import com.bifangan.dmDemo.mapper.SimilarMapper;
 import com.bifangan.dmDemo.mapper.TRegFaceUserMapper;
 import com.bifangan.dmDemo.service.SimilarService;
 import com.bifangan.dmDemo.utils.FileUploadUtil;
 import com.bifangan.dmDemo.utils.image.similarity.ImageHanmingUtil;
 
 @Service
-public class SimilarServiceImpl implements SimilarService{
+public class SimilarServiceImpl extends ServiceImpl<SimilarMapper, Similar> implements SimilarService{
 	
 	@Autowired
 	private TRegFaceUserMapper tRegFaceUserMapper;
@@ -33,7 +36,7 @@ public class SimilarServiceImpl implements SimilarService{
 		
 		QueryWrapper<TRegFaceUser> queryWrapper = new QueryWrapper<TRegFaceUser>();
 		List<TRegFaceUser> userList = tRegFaceUserMapper.selectList(queryWrapper);
-		if(userList != null && userList.isEmpty()) {
+		if(userList != null && !userList.isEmpty()) {
 			ImageHanmingUtil hanmingHash = new ImageHanmingUtil();
 			int maxDistence = 0;
 			for(Iterator<TRegFaceUser> iterator = userList.iterator();iterator.hasNext();) {

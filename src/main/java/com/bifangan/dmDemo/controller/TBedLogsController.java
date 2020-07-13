@@ -84,4 +84,8 @@ public class TBedLogsController {
         return new R<>(tBedLogsService.removeById(id));
     }
 
+    @GetMapping("/bedSituation")
+    public R queryBedTime() {
+    	return new R<>(tBedLogsService.list());
+    }
 }
