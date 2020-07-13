@@ -25,7 +25,7 @@
 		connect,
 		sn
 		FROM
-		`t_device`;
+		`t_device`
 	</select>
 	<select id="electricLinesByDid" resultType="com.bifangan.dmDemo.entity.ElectricLine">
 		SELECT
@@ -89,7 +89,7 @@
 		where dept_id = #{deptId}
 	</update>
 	<insert id="insertLineRealtiming" parameterType="com.bifangan.dmDemo.entity.ElectricLine">
-	   INSERT INTO t_line_realtimingdata (id,lid,voltage,current,temp,leakage,power,status,energy,append_time) VALUES (#{id},#{lid},#{voltage},#{current},#{temp},#{leakage},#{power},#{status},#{energy},#{appendTime});
+	   INSERT INTO t_line_realtimingdata (id,lid,voltage,current,temp,leakage,power,status,energy,append_time) VALUES (#{id},#{lid},#{voltage},#{current},#{temp},#{leakage},#{power},#{status},#{energy},#{appendTime})
 	</insert>
 	<select id="lineRealtimingdataByLineId" resultType="com.bifangan.dmDemo.entity.ElectricLine">
 		SELECT
