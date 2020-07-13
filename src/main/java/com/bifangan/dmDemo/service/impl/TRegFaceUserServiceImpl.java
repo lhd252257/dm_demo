@@ -29,6 +29,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bifangan.dmDemo.common.R;
 import com.bifangan.dmDemo.common.UUIDUtils;
 import com.bifangan.dmDemo.constant.CommonConstants;
+import com.bifangan.dmDemo.entity.ElectricLine;
 import com.bifangan.dmDemo.entity.TBedLogs;
 import com.bifangan.dmDemo.entity.TDept;
 import com.bifangan.dmDemo.entity.TRegFaceUser;
@@ -36,6 +37,7 @@ import com.bifangan.dmDemo.global.CounterGlobal;
 import com.bifangan.dmDemo.mapper.TBedLogsMapper;
 import com.bifangan.dmDemo.mapper.TDeptMapper;
 import com.bifangan.dmDemo.mapper.TRegFaceUserMapper;
+import com.bifangan.dmDemo.service.ElectricService;
 import com.bifangan.dmDemo.service.TRegFaceUserService;
 import com.bifangan.dmDemo.utils.FaceIdUtil;
 import com.bifangan.dmDemo.utils.FileUploadUtil;
@@ -63,6 +65,9 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 	
 	@Autowired
 	private TDeptMapper tDeptMapper;
+	
+	@Autowired
+	private ElectricService electricService;
 	
 	@Override
 	public R blacklist(FaceDeviceAuthVO fda) {
@@ -119,23 +124,30 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				// 计数器，判断宿舍人员是否有人
 				Integer counter = CounterGlobal.get(faceUser.getDeptId());
 				if(bedLogs.getIoFlag() == 1) {
-					System.out.println("counter:"+counter);
+//					System.out.println("counter:"+counter);
 					if(counter == 0) {
 						// TODO 宿舍送电
-						System.out.println(faceUser.getDept() + "===========================送电");
+						ElectricLine electricLine = new ElectricLine();
+						electricLine.setDeptId(faceUser.getDeptId());
+						electricLine.setStatus(1);
+						electricService.electricPowerOff(electricLine);
+//						System.out.println(faceUser.getDept() + "===========================送电");
 					}
 					CounterGlobal.put(faceUser.getDeptId(), ++counter);
-					System.out.println("counter:"+counter);
+//					System.out.println("counter:"+counter);
 				} else {
-					System.out.println("counter:"+counter);
+//					System.out.println("counter:"+counter);
 					if(counter != 0) {
 						CounterGlobal.put(faceUser.getDeptId(), --counter);
 					}
 					if(counter == 0) {
 						// TODO 宿舍断电
-						System.out.println(faceUser.getDept() + "===========================断电");
+						ElectricLine electricLine = new ElectricLine();
+						electricLine.setDeptId(faceUser.getDeptId());
+						electricLine.setStatus(0);
+//						System.out.println(faceUser.getDept() + "===========================断电");
 					}
-					System.out.println("counter:"+counter);
+//					System.out.println("counter:"+counter);
 				}
 			}
 		}
@@ -219,7 +231,7 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 		data.put("card", "");	// id卡的卡号
 		data.put("ip", user.getInFaceDevice());	//注册的目标设备IP地址
 		String params = JSON.toJSONString(data);
-		System.out.println(params);
+//		System.out.println(params);
 		String responseBody = HttpUtil.doPost(CommonConstants.FACE_USER_ADD, params);
 		
 		@SuppressWarnings("rawtypes")
@@ -234,7 +246,7 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 			data1.put("card", "");	// id卡的卡号
 			data1.put("ip", user.getOutFaceDevice());
 			String params1 = JSON.toJSONString(data1);
-			System.out.println(params1);
+//			System.out.println(params1);
 			String responseBody1 = HttpUtil.doPost(CommonConstants.FACE_USER_ADD, params1);
 			
 			@SuppressWarnings("rawtypes")

@@ -14,7 +14,6 @@ import com.bifangan.dmDemo.common.UUIDUtils;
 public class DmDemoApplication {
 
 	public static void main(String[] args) {
-		System.out.println(UUIDUtils.getUUID36());
 		SpringApplication.run(DmDemoApplication.class, args);
 	}
 
