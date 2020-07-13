@@ -45,7 +45,7 @@ public class Scheduler{
                 if(deviceEnergy == null){
                     lineRealtiming.setEnergy(BigDecimal.valueOf(0));
                 }else{
-                    System.out.println("----------------------------------------------------------------------");
+                    //System.out.println("----------------------------------------------------------------------");
                     List<Lines> linesEnergy = deviceEnergy.getLines();
                     for (Lines lineEnergy:linesEnergy) {
                         if(Line.getLineID().equals(lineEnergy.getLineID())){

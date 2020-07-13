@@ -108,8 +108,8 @@ public class ElectricServiceImpl implements ElectricService {
 
         List<DeviceInfo> arrayList = com.alibaba.fastjson.JSONObject.parseArray(string,DeviceInfo.class);
 
-        System.out.println(timeStamp+"----------------"+arrayList.size());
-        System.out.println(string);
+        //System.out.println(timeStamp+"----------------"+arrayList.size());
+        //System.out.println(string);
 
         if(arrayList.size()>0){
             return arrayList.get(0);
