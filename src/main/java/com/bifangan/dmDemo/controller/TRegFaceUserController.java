@@ -87,8 +87,8 @@ public class TRegFaceUserController {
      * @return R
      */
     @PutMapping
-    public R updateById(@RequestBody TRegFaceUser tRegFaceUser) {
-        return new R<>(tRegFaceUserService.updateById(tRegFaceUser));
+    public R updateById(RegFaceUserVO user) {
+        return new R<>(tRegFaceUserService.updateById(user));
     }
 
     /**
@@ -100,17 +100,12 @@ public class TRegFaceUserController {
     public R removeById(@PathVariable String id) {
         return new R<>(tRegFaceUserService.removeById(id));
     }
-
-    
     
     @PostMapping("/blacklist")
     public R blacklist(@RequestBody String json) {
     	FaceDeviceAuthVO fda = JSON.parseObject(json,FaceDeviceAuthVO.class);;
     	return tRegFaceUserService.blacklist(fda);
     }
-//    public R blacklist(@RequestBody FaceDeviceAuthVO fda) {
-//    	return tRegFaceUserService.blacklist(fda);
-//    }
     
     @GetMapping("/blacklist")
     public R getBlackList() {

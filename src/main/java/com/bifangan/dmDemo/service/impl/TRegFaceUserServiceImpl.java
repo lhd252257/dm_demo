@@ -2,6 +2,8 @@ package com.bifangan.dmDemo.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -181,6 +184,31 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 	}
 	
 	@Override
+	public boolean updateById(RegFaceUserVO user) {
+		TRegFaceUser faceUser = tRegFaceUserMapper.selectById(user.getId());
+		if(faceUser.getPhoto() == null) {
+			MultipartFile photo = user.getPhotoFile();
+			if(photo != null) {
+				String filePath = FileUploadUtil.upload(photo);
+				user.setPhoto(filePath);
+				if(regUser(user)) {
+					try {
+						if(faceUser == null)
+							faceUser = new TRegFaceUser();
+						ObjectUtil.cpoyObjAttr(user, faceUser, TRegFaceUser.class);
+						return super.updateById(user);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return false;
+		
+	}
+	
+	@Override
 	public boolean regUser(RegFaceUserVO user) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		
@@ -243,14 +271,21 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				if(null == row){
 					continue;
 				}
+				SimpleDateFormat fds = new SimpleDateFormat("yyyy/MM/dd");
+				
 				String name = row.getCell(0).getStringCellValue();
 				int gender = "男".equals(row.getCell(1).getStringCellValue()) ? 1 : 0;
+				row.getCell(2).setCellType(CellType.NUMERIC);
 				Date birthday = row.getCell(2).getDateCellValue();
 				String idCard = row.getCell(3).getStringCellValue();
+				row.getCell(4).setCellType(CellType.STRING);
 				String jobNumber = row.getCell(4).getStringCellValue();
+				row.getCell(5).setCellType(CellType.STRING);
 				String phone = row.getCell(5).getStringCellValue();
 				String email = row.getCell(6).getStringCellValue();
 				int isBlacklist = "是".equals(row.getCell(7).getStringCellValue()) ? 1 : 0;
+				String passingTime = row.getCell(8).getStringCellValue();
+				user.setId(UUIDUtils.getUUID36());
 				user.setName(name);
 				user.setGender(gender);
 				user.setBirthday(birthday);
@@ -259,6 +294,7 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				user.setPhone(phone);
 				user.setEmail(email);
 				user.setIsBlacklist(isBlacklist);
+				user.setPassingTime(passingTime);
 				userList.add(user);
 			}
 			for(TRegFaceUser userInfo:userList){
@@ -266,7 +302,7 @@ public class TRegFaceUserServiceImpl extends ServiceImpl<TRegFaceUserMapper, TRe
 				 * 判断数据库表中是否存在用户记录，若存在，则更新，不存在，则保存记录
 				 */
 				String idCard = userInfo.getIdCard();
-				QueryWrapper query = new QueryWrapper();
+				QueryWrapper<TRegFaceUser> query = new QueryWrapper<TRegFaceUser>();
 				query.eq("id_card", idCard);
 				TRegFaceUser faceUser = tRegFaceUserMapper.selectOne(query);
 				if(faceUser == null){			

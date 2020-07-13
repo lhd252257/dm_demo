@@ -33,4 +33,6 @@ public interface TRegFaceUserService extends IService<TRegFaceUser> {
 	public List<TRegFaceUser> textFullSearch(String content);
 	
 	public List<TRegFaceUser> getblackList();
+
+	boolean updateById(RegFaceUserVO user);
 }
