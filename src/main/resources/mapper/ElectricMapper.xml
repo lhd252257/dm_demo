@@ -95,11 +95,11 @@
 		SELECT
 		id,
 		lid,
-		voltage,
-		current,
-		temp,
-		leakage,
-		power,
+		IFNULL(voltage,0) as voltage,
+		IFNULL(current,0) as current,
+		IFNULL(temp,0) as temp ,
+		IFNULL(leakage,0) as leakage,
+		IFNULL(power,0) as power,
 		`status`,
 		IFNULL(energy,0) as energy,
 		append_time as appendTime
